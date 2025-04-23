@@ -14,9 +14,9 @@ public class Tour {
     private Long id;
     private String name;
     private String description;
-    public String from;
-    public String to;
+    public String startingPoint;
+    public String destination;
     public String transportType;
-    public Integer distance;
-    public Integer duration;
+    public Double distance;
+    public Double duration;
 }

@@ -23,6 +23,11 @@ public class TourController {
         return this.tourService.createTour(tour);
     }
 
+    @PutMapping("/tour")
+    public Tour updateTour(@RequestBody Tour tour) {
+        return this.tourService.updateTour(tour);
+    }
+
     @GetMapping("/tours")
     public Iterable<Tour> getTours() {
         return this.tourService.getTours();

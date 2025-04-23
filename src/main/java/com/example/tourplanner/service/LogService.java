@@ -19,7 +19,9 @@ public class LogService {
         return this.logRepository.findById(id).orElse(null);
     }
 
-    // TODO: findLogsByTourId
+    public Iterable<Log> findLogsByTourId(Long tourId) {
+        return this.logRepository.findByTourId(tourId);
+    }
 
     public Log createLog(Log log) {
         return this.logRepository.save(log);

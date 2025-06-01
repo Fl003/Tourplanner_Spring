@@ -36,7 +36,11 @@ public class TourService {
             tour.setName(updatedTour.getName());
             tour.setDescription(updatedTour.getDescription());
             tour.setStartingPoint(updatedTour.getStartingPoint());
+            tour.setStartLat(updatedTour.getStartLat());
+            tour.setStartLng(updatedTour.getStartLng());
             tour.setDestination(updatedTour.getDestination());
+            tour.setDestinationLat(updatedTour.getDestinationLat());
+            tour.setDestinationLng(updatedTour.getDestinationLng());
             tour.setTransportType(updatedTour.getTransportType());
             tour.setDistance(updatedTour.getDistance());
             tour.setDuration(updatedTour.getDuration());

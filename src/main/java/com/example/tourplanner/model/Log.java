@@ -18,7 +18,7 @@ public class Log {
     private Timestamp datetime;
     private String comment;
     private String difficulty;
-    private String distance;
-    private String duration;
+    private String totalDistance;
+    private String totalDuration;
     private Integer rating;
 }

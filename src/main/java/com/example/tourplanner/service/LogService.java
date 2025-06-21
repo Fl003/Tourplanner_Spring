@@ -5,6 +5,8 @@ import com.example.tourplanner.repo.LogRepository;
 import jakarta.inject.Named;
 import jakarta.transaction.Transactional;
 
+import java.util.Optional;
+
 // Business Logic Layer
 
 @Named
@@ -27,10 +29,22 @@ public class LogService {
         return this.logRepository.save(log);
     }
 
-    public Iterable<Log> getLogs() {
-        return this.logRepository.findAll();
-    }
+    public Log updateLog(Log updatedLog) {
+        Optional<Log> existing = logRepository.findById(updatedLog.getId());
+        if (existing.isPresent()) {
+            Log log = existing.get();
+            log.setDatetime(updatedLog.getDatetime());
+            log.setComment(updatedLog.getComment());
+            log.setDifficulty(updatedLog.getDifficulty());
+            log.setTotalDistance(updatedLog.getTotalDistance());
+            log.setTotalDuration(updatedLog.getTotalDuration());
+            log.setRating(updatedLog.getRating());
 
+            return logRepository.save(log); // Update in DB
+        }
+        return null;
+    }
+    
     @Transactional
     public Integer deleteLog(Long id) {
         return this.logRepository.removeLogById(id);

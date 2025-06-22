@@ -25,6 +25,10 @@ public class TourService {
         return this.tourRepository.save(tour);
     }
 
+    public Tour getLatest() {
+        return this.tourRepository.findTopByOrderByIdDesc();
+    }
+
     public Iterable<Tour> getTours() {
         return this.tourRepository.findAll();
     }

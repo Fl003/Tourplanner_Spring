@@ -28,6 +28,9 @@ public class TourController {
         return this.tourService.updateTour(tour);
     }
 
+    @GetMapping("/tour/latest")
+    public Tour getTourLatest() { return this.tourService.getLatest(); }
+
     @GetMapping("/tours")
     public Iterable<Tour> getTours() {
         return this.tourService.getTours();

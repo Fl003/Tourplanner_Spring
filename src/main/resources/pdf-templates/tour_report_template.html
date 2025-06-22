@@ -2,18 +2,177 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    body {
+      width: 100%;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 20px 0;
+    }
+
+    td, th {
+      height: 30px;
+      padding: 5px;
+    }
+
+    td p {
+      word-break: keep-all;
+    }
+
+    .tour-details td:first-child {
+      width: 175px;
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .tour-details td p {
+      display: inline-block;
+    }
+
+    .logs {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .logs td,
+    .logs th {
+      border: 1px solid #dddddd;
+    }
+
+    .logs tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    .stars {
+      display: inline-block;
+    }
+
+    .stars img {
+      width: 15px;
+      height: 15px;
+      margin-left: 5px;
+    }
   </style>
 </head>
 <body>
 <h1>Tour Report</h1>
-<div class="tour-details">
-  <p th:text="'Tour Name: ' + ${tour.name}"></p>
-  <p th:text="'Tour Description: ' + ${tour.description}"></p>
-  <p th:text="'Tour Startingpoint: ' + ${tour.startingPoint}"></p>
-  <p th:text="'Tour Destination: ' + ${tour.destination}"></p>
-  <p th:text="'Tour TransportType: ' + ${tour.transportType}"></p>
-  <p th:text="'Tour Distance: ' + ${tour.distance}"></p>
-  <p th:text="'Tour Duration: ' + ${tour.duration}"></p>
-</div>
+
+<table class="tour-details">
+  <tr>
+    <td>Name:</td>
+    <td th:text="${tour.name}"></td>
+  </tr>
+  <tr>
+    <td>Description:</td>
+    <td th:text="${tour.description}"></td>
+  </tr>
+  <tr>
+    <td>Startingpoint:</td>
+    <td th:text="${tour.startingPoint}"></td>
+  </tr>
+  <tr>
+    <td>Destination:</td>
+    <td th:text="${tour.destination}"></td>
+  </tr>
+  <tr>
+    <td>Transport type:</td>
+    <td th:text="${tour.transportType}"></td>
+  </tr>
+  <tr>
+    <td>Distance:</td>
+    <td th:text="${#numbers.formatDecimal(tour.distance, 1, 2)} + 'km'"></td>
+  </tr>
+  <tr>
+    <td>Duration:</td>
+    <td>
+      <p>
+        <span th:if="${tour.hours > 0}" th:text="${tour.hours} + 'h '"></span>
+        <span th:if="${tour.minutes > 0}" th:text="${tour.minutes} + 'min '"></span>
+        <span th:if="${tour.seconds > 0}" th:text="${tour.seconds} + 'sec'"></span>
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <td>Popularity:</td>
+    <td>
+      <div class="stars">
+        <!-- Gefüllte Sterne -->
+        <span th:each="i : ${#numbers.sequence(1, tour.popularity)}">
+          <img src="classpath:/images/star_yellow.png" alt="★"/>
+        </span>
+        <!-- Leere Sterne -->
+        <span th:each="i : ${#numbers.sequence(1, 5 - tour.popularity)}">
+          <img src="classpath:/images/star.png" alt="☆"/>
+        </span>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>Child-Friendliness:</td>
+    <td>
+      <div class="stars">
+        <!-- Gefüllte Sterne -->
+        <span th:each="i : ${#numbers.sequence(1, tour.childFriendliness)}">
+          <img src="classpath:/images/star_yellow.png" alt="★"/>
+        </span>
+        <!-- Leere Sterne -->
+        <span th:each="i : ${#numbers.sequence(1, 5 - tour.childFriendliness)}">
+          <img src="classpath:/images/star.png" alt="☆"/>
+        </span>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<h2>Logs</h2>
+<table class="logs">
+  <tr>
+    <th>Date/Time</th>
+    <th>Difficulty</th>
+    <th>Total Distance</th>
+    <th>Total Time</th>
+    <th>Rating</th>
+    <th>Comment</th>
+  </tr>
+  <tr th:each="item: ${logs}">
+    <td>
+      <p th:text="${item.date}"></p>
+      <p th:text="${item.time}"></p>
+    </td>
+    <td th:text="${item.difficulty}"></td>
+    <td th:text="${#numbers.formatDecimal(item.totalDistance, 1, 2)} + 'km'"></td>
+    <td>
+      <p>
+        <span th:if="${item.hours > 0}" th:text="${item.hours} + 'h '"></span>
+        <span th:if="${item.minutes > 0}" th:text="${item.minutes} + 'min '"></span>
+        <span th:if="${item.seconds > 0}" th:text="${item.seconds} + 'sec'"></span>
+      </p>
+    </td>
+    <td>
+      <div class="stars">
+        <!-- Gefüllte Sterne -->
+        <span th:each="i : ${#numbers.sequence(1, item.rating)}">
+          <img src="classpath:/images/star_yellow.png" alt="★"/>
+        </span>
+        <!-- Leere Sterne -->
+        <span th:if="${item.rating < 5}" th:each="i : ${#numbers.sequence(1, 5 - item.rating)}">
+          <img src="classpath:/images/star.png" alt="☆"/>
+        </span>
+      </div>
+    </td>
+    <td th:text="${item.comment}"></td>
+  </tr>
+</table>
 </body>
 </html>

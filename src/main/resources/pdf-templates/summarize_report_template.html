@@ -2,12 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        body {
+            width: 100%;
+        }
+
         h1{
-            color: blue;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            margin: 20px 0;
+        }
+
+        td {
+            display: inline-block;
+            height: 30px;
+            padding: 5px;
+        }
+
+        td:first-child {
+            width: 175px;
+            text-align: right;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 <h1>Summarize Report</h1>
+
+<div th:each="item: ${items}">
+    <h3 th:text="${item.tourName}"></h3>
+    <table>
+        <tr>
+            <td>Average Time:</td>
+            <td>
+                <span th:if="${item.hours > 0}" th:text="${item.hours} + 'h '"></span>
+                <span th:if="${item.minutes > 0}" th:text="${item.minutes} + 'min '"></span>
+                <span th:if="${item.seconds > 0}" th:text="${item.seconds} + 'sec'"></span>
+                <span th:if="${item.hours == 0 && item.minutes == 0 && item.seconds == 0}">0min</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Average Distance:</td>
+            <td th:text="${#numbers.formatDecimal(item.avgDistance / 1000, 1, 2)} + 'km'"></td>
+        </tr>
+        <tr>
+            <td>Average Rating:</td>
+            <td th:text="${item.avgRating} + ' Stars'"></td>
+        </tr>
+    </table>
+</div>
+
 </body>
 </html>

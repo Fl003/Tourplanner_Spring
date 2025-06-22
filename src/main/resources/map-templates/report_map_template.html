@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Tour Route</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" crossorigin="anonymous" />
+    <style>
+        html, body, #map {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" crossorigin="anonymous"></script>
+<script th:inline="javascript">
+    // Thymeleaf Variablen
+    const fromLat = [[${fromLat}]];
+    const fromLng = [[${fromLng}]];
+    const toLat = [[${toLat}]];
+    const toLng = [[${toLng}]];
+    const routeCoordinates = [[${routeCoordinates}]];
+
+    // Initialisiere Karte
+    const map = L.map('map').setView([fromLat, fromLng], 13);
+
+    // Füge Tile Layer hinzu
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Start und Ziel Marker
+    L.marker([fromLat, fromLng])
+        .bindPopup('Start')
+        .addTo(map);
+
+    L.marker([toLat, toLng])
+        .bindPopup('Ziel')
+        .addTo(map);
+
+    // Route zeichnen
+    if (routeCoordinates && routeCoordinates.length > 0) {
+        const polyline = L.polyline(routeCoordinates, {
+            color: 'blue',
+            weight: 4,
+            opacity: 0.7
+        }).addTo(map);
+
+        // Karte an Route anpassen
+        map.fitBounds(polyline.getBounds());
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <style>
+  </style>
+</head>
+<body>
+<h1>Tour Report</h1>
+<div class="tour-details">
+  <p th:text="'Tour Name: ' + ${tour.name}"></p>
+  <p th:text="'Tour Description: ' + ${tour.description}"></p>
+  <p th:text="'Tour Startingpoint: ' + ${tour.startingPoint}"></p>
+  <p th:text="'Tour Destination: ' + ${tour.destination}"></p>
+  <p th:text="'Tour TransportType: ' + ${tour.transportType}"></p>
+  <p th:text="'Tour Distance: ' + ${tour.distance}"></p>
+  <p th:text="'Tour Duration: ' + ${tour.duration}"></p>
+</div>
+</body>
+</html>

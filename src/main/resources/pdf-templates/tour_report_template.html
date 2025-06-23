@@ -40,6 +40,12 @@
       display: inline-block;
     }
 
+    .noLogs {
+      width: 100%;
+      text-align: center;
+      font-style: italic;
+    }
+
     .logs {
       width: 100%;
       border-collapse: collapse;
@@ -136,7 +142,9 @@
 </table>
 
 <h2>Logs</h2>
-<table class="logs">
+<span th:if="${logs.isEmpty()}" class="noLogs">No logs available.</span>
+
+<table th:if="${logs.isEmpty() == false}" class="logs">
   <tr>
     <th>Date/Time</th>
     <th>Difficulty</th>

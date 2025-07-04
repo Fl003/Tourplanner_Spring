@@ -1,18 +1,16 @@
-package com.example.tourplanner.model;
+package com.example.tourplanner.pdf.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.tourplanner.model.Log;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
-@Entity
-public class Tour {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+public class ImportExportEntity {
     private String name;
     private String description;
     public String startingPoint;
@@ -24,4 +22,5 @@ public class Tour {
     public String transportType;
     public Double distance;
     public Double duration;
+    List<Log> logs;
 }

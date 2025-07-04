@@ -2,7 +2,10 @@ package com.example.tourplanner.rest;
 
 import com.example.tourplanner.model.Tour;
 import com.example.tourplanner.service.TourService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TourController {

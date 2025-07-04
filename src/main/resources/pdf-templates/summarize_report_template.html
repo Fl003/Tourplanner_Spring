@@ -37,7 +37,7 @@
 <body>
 <h1>Summarize Report</h1>
 
-<div th:each="item: ${items}">
+<div th:if="${itemsCount > 0}" th:each="item: ${items}">
     <h3 th:text="${item.tourName}"></h3>
     <table>
         <tr>
@@ -60,5 +60,8 @@
     </table>
 </div>
 
+<div th:if="${itemsCount == 0}">
+    <h3>No Tours available</h3>
+</div>
 </body>
 </html>

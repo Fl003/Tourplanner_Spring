@@ -114,35 +114,33 @@ public class PdfService {
     public byte[] generateSummarizeReportPdfFile() {
         Iterable<Tour> tours = this.tourRepository.findAll();
 
-        if (!tours.iterator().hasNext()) {
-            System.out.println("No tours found");
-            return null;
-        }
-
         List<SummarizeEntity> summarizeEntities = new ArrayList<>();
-        for (Tour tour : tours) {
-            List<Log> logs = this.logRepository.findByTourId(tour.getId());
-            if (logs == null || logs.isEmpty()) {
-                summarizeEntities.add(new SummarizeEntity(tour.getName(), 0, 0, 0, 0.0, 0.0));
-            } else {
-                double timeOfAllLogs = 0, distanceOfAllLogs = 0, ratingOfAllLogs = 0;
-                for (Log log : logs) {
-                    timeOfAllLogs += log.getTotalDuration();
-                    distanceOfAllLogs += log.getTotalDistance();
-                    ratingOfAllLogs += log.getRating();
+        if (tours.iterator().hasNext()) {
+            for (Tour tour : tours) {
+                List<Log> logs = this.logRepository.findByTourId(tour.getId());
+                if (logs == null || logs.isEmpty()) {
+                    summarizeEntities.add(new SummarizeEntity(tour.getName(), 0, 0, 0, 0.0, 0.0));
+                } else {
+                    double timeOfAllLogs = 0, distanceOfAllLogs = 0, ratingOfAllLogs = 0;
+                    for (Log log : logs) {
+                        timeOfAllLogs += log.getTotalDuration();
+                        distanceOfAllLogs += log.getTotalDistance();
+                        ratingOfAllLogs += log.getRating();
+                    }
+                    int logsCount = logs.size();
+                    double avgTime = timeOfAllLogs / logsCount;
+                    int hours = (int) Math.floor(avgTime / 3600);
+                    int minutes = (int) Math.floor(avgTime % 3600 / 60);
+                    int seconds = (int) Math.floor(avgTime % 60);
+                    summarizeEntities.add(new SummarizeEntity(tour.getName(), hours, minutes, seconds, distanceOfAllLogs / logsCount, ratingOfAllLogs / logsCount));
                 }
-                int logsCount = logs.size();
-                double avgTime = timeOfAllLogs / logsCount;
-                int hours = (int) Math.floor(avgTime / 3600);
-                int minutes = (int) Math.floor(avgTime % 3600 / 60);
-                int seconds = (int) Math.floor(avgTime % 60);
-                summarizeEntities.add(new SummarizeEntity(tour.getName(), hours, minutes, seconds, distanceOfAllLogs / logsCount, ratingOfAllLogs / logsCount));
             }
         }
 
         Context context = new Context();
         Map<String, Object> data = new HashMap<>();
         data.put("items", summarizeEntities);
+        data.put("itemsCount", summarizeEntities.size());
         context.setVariables(data);
 
         String htmlContent = pdfTemplateEngine.process("summarize_report_template", context);

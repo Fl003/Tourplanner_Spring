@@ -28,6 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -44,8 +47,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-pdf</artifactId>
-			<version>9.1.22</version>
+			<artifactId>flying-saucer-pdf-itext5</artifactId>
+			<version>9.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lowagie</groupId>
+			<artifactId>itext</artifactId>
+			<version>2.1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.inject</groupId>
@@ -59,7 +67,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.38</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -72,11 +80,27 @@
 			<artifactId>httpclient</artifactId>
 			<version>4.5.13</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- Log4j2 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -85,6 +109,29 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>-->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.source}</target>
+					<basedir/>
+					<buildDirectory/>
+					<!--<mainOutputDirectory/>-->
+					<outputDirectory/>
+					<projectArtifact/>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.34</version>
+						</path>
+						<!-- Add other annotation processors here if needed -->
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>

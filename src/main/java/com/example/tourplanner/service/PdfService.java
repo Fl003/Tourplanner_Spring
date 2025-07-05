@@ -17,6 +17,8 @@ import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.util.*;
 
 @Named
 public class PdfService {
+    private static final Logger logger = LogManager.getLogger(PdfService.class);
     private final TourRepository tourRepository;
     private final LogRepository logRepository;
 
@@ -39,10 +42,12 @@ public class PdfService {
     }
 
     public byte[] generateTourReportPdfFile(Long id) {
+        logger.info("Generating tour report PDF for tour ID: {}", id);
+
         Tour tour = this.tourRepository.findById(id).orElse(null);
 
         if (tour == null) {
-            System.out.println("Tour not found");
+            logger.warn("Tour not found for ID: {}", id);
             return null;
         }
 
@@ -105,13 +110,19 @@ public class PdfService {
             renderer.createPDF(outputStream, false);
             renderer.finishPDF();
 
+            logger.info("Successfully generated tour report PDF for tour ID: {}", id);
             return outputStream.toByteArray();
-        } catch (DocumentException | IOException e) {
-            throw new RuntimeException("Fehler bei der PDF-Generierung: " + e.getMessage(), e);
+        } catch (IOException e) {
+            logger.error("IO Exception during PDF generation for tour ID {}: {}", id, e.getMessage(), e);
+            throw new RuntimeException("FPDF-Generierung error: " + e.getMessage(), e);
+        } catch (com.itextpdf.text.DocumentException e) {
+            logger.error("Document Exception during PDF generation for tour ID {}: {}", id, e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 
     public byte[] generateSummarizeReportPdfFile() {
+        logger.info("Generating summarize report PDF");
         Iterable<Tour> tours = this.tourRepository.findAll();
 
         List<SummarizeEntity> summarizeEntities = new ArrayList<>();
@@ -152,9 +163,11 @@ public class PdfService {
             renderer.createPDF(outputStream, false);
             renderer.finishPDF();
 
+            logger.info("Successfully generated summarize report PDF with {} items", summarizeEntities.size());
             return outputStream.toByteArray();
-        } catch (DocumentException | IOException e) {
-            throw new RuntimeException("Fehler bei der PDF-Generierung: " + e.getMessage(), e);
+        } catch (IOException | com.itextpdf.text.DocumentException e) {
+            logger.error("Exception during summarize PDF generation: {}", e.getMessage(), e);
+            throw new RuntimeException("PDF-Generierung error: " + e.getMessage(), e);
         }
     }
 
